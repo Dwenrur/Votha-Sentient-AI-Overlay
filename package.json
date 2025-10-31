@@ -1,0 +1,14 @@
+{
+  "name": "votha-sentient-ai-overlay",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Stream-aware AI co-host (Votha) running locally with Llama 3.2 8B",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2",
+    "ws": "^8.18.0"
+  }
+}

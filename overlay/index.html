@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Votha Overlay</title>
+  <style>
+    :root { --base:#29d3ff; --hype:#ff3da9; --reflect:#4a6cff; --size:82px; }
+    body { margin:0; background:transparent; }
+    .v-shell { width:var(--size); height:var(--size); display:grid; place-items:center; position:relative; }
+    .v-core { width:64px; height:64px; border-radius:9999px;
+      background:radial-gradient(circle at 30% 30%, #fff, var(--base));
+      box-shadow:0 0 24px rgba(41,211,255,.6); transition:all .25s ease; }
+
+    /* idle */
+    .state-idle .v-core { animation:breathe 2.6s ease-in-out infinite; }
+    @keyframes breathe {
+      0%,100% { transform:scale(1); }
+      50% { transform:scale(1.06); }
+    }
+
+    /* speaking */
+    .state-speaking .v-core {
+      animation:speak .28s ease-in-out 4;
+      background:radial-gradient(circle at 30% 30%, #fff, #7af1ff);
+      box-shadow:0 0 32px rgba(122,241,255,.9);
+    }
+    @keyframes speak {
+      0% { transform:scale(1); }
+      50% { transform:scale(1.12); }
+      100% { transform:scale(1); }
+    }
+
+    /* hype */
+    .state-hype .v-core {
+      background:radial-gradient(circle at 30% 30%, #fff, var(--hype));
+      animation:hype .5s ease-out 1, hypepulse 1.5s ease-in-out infinite .5s;
+    }
+    @keyframes hype {
+      0% { transform:scale(1); }
+      40% { transform:scale(1.36); }
+      100% { transform:scale(1.1); }
+    }
+    @keyframes hypepulse {
+      0%,100% { transform:scale(1.1); }
+      50% { transform:scale(1.2); }
+    }
+
+    /* reflective */
+    .state-reflective .v-core {
+      background:radial-gradient(circle at 20% 20%, rgba(255,255,255,.3), var(--reflect));
+      animation:reflect 4s ease-in-out infinite;
+    }
+    @keyframes reflect {
+      0%,100% { transform:scale(1); opacity:.85; }
+      50% { transform:scale(1.04); opacity:1; }
+    }
+
+    /* glitch */
+    .state-glitch .v-core {
+      animation:glitch .45s steps(4,end) 1;
+      background:linear-gradient(120deg, #ff66c4 0%, #29d3ff 50%, #fff 100%);
+    }
+    @keyframes glitch {
+      0% { transform:translate(0,0); }
+      25% { transform:translate(-2px,1px); }
+      50% { transform:translate(2px,-1px); }
+      75% { transform:translate(-1px,2px); }
+      100% { transform:translate(0,0); }
+    }
+
+    /* text bubble */
+    .v-text {
+      position:absolute;
+      top:90px;
+      left:50%;
+      transform:translateX(-50%);
+      min-width:150px;
+      max-width:260px;
+      background:rgba(5,6,10,.78);
+      color:#fff;
+      font:13px system-ui;
+      padding:6px 10px;
+      border-radius:12px;
+      opacity:0;
+      transition:opacity .2s;
+    }
+    .state-speaking .v-text,
+    .state-hype .v-text {
+      opacity:1;
+    }
+  </style>
+</head>
+<body>
+  <div id="votha" class="v-shell state-idle">
+    <div class="v-core"></div>
+    <div id="vtext" class="v-text"></div>
+  </div>
+  <script>
+    const ws = new WebSocket('ws://localhost:8765');
+    const root = document.getElementById('votha');
+    const textEl = document.getElementById('vtext');
+
+    function setState(s, t) {
+      root.className = 'v-shell ' + s;
+      if (t) textEl.textContent = t;
+      if (s === 'state-speaking' || s === 'state-hype') {
+        setTimeout(() => {
+          root.className = 'v-shell state-idle';
+        }, 2500);
+      }
+    }
+
+    ws.addEventListener('message', (ev) => {
+      try {
+        const d = JSON.parse(ev.data);
+        const s = d.state || 'idle';
+        const t = d.text || '';
+        if (s === 'speaking') setState('state-speaking', t);
+        else if (s === 'hype') setState('state-hype', t);
+        else if (s === 'reflective') setState('state-reflective', t);
+        else if (s === 'glitch') setState('state-glitch', t);
+        else setState('state-idle', t);
+      } catch (e) {
+        console.warn('overlay parse', e);
+      }
+    });
+  </script>
+</body>
+</html>

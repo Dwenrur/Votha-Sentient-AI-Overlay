@@ -8,6 +8,7 @@
     "start": "node src/app/index.js"
   },
   "dependencies": {
+    "dotenv": "^17.2.3",
     "node-fetch": "^3.3.2",
     "tmi.js": "^1.8.5",
     "ws": "^8.18.0"

@@ -4,14 +4,23 @@ import { loadConfig } from '../utils/config.js';
 export function connectTwitch(onEvent, opts = {}) {
   const config = loadConfig();
 
-  const {
-    username = process.env.TWITCH_BOT_USERNAME,
-    oauth = process.env.TWITCH_OAUTH_TOKEN,
-    channel = opts.channel || config?.twitch?.channel
-  } = opts;
+  const username =
+    process.env.TWITCH_BOT_USERNAME ||
+    config?.twitch?.username ||
+    opts.username;
 
-  if (!channel) {
-    console.error('[twitch] no channel specified in config.votha or env (TWITCH_CHANNEL)');
+  const oauth =
+    process.env.TWITCH_OAUTH_TOKEN ||
+    config?.twitch?.oauth ||
+    opts.oauth;
+
+  const channel =
+    process.env.TWITCH_CHANNEL ||
+    config?.twitch?.channel ||
+    opts.channel;
+
+  if (!username || !oauth || !channel) {
+    console.error('[twitch] Missing credentials. Check .env or config/votha.config.json');
     return;
   }
 
@@ -22,7 +31,7 @@ export function connectTwitch(onEvent, opts = {}) {
 
   client.connect()
     .then(() => {
-      console.log('[twitch] connected as', username, 'to', channel);
+      console.log(`[twitch] connected as ${username} to #${channel}`);
       onEvent({ type: 'stream_start' });
     })
     .catch(console.error);
@@ -60,3 +69,4 @@ export function connectTwitch(onEvent, opts = {}) {
 
   return client;
 }
+

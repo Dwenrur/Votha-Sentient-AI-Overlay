@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { loadConfig } from '../utils/config.js';
 
 const SYSTEM_PROMPT = `
 You are Votha, a humanlike, stream-aware AI co-host that lives inside a livestream overlay.
@@ -14,22 +15,30 @@ Constraints:
 Output only the line.
 `;
 
-export async function generateVothaLine({ context, instruction, model = 'llama3.2:8b' }) {
+const cfg = loadConfig();
+const MODEL_NAME = cfg?.model?.name || 'llama3.1:8b';
+const TEMPERATURE = cfg?.model?.temperature ?? 0.7;
+const TOP_P = cfg?.model?.top_p ?? 0.9;
+const MAX_TOKENS = cfg?.model?.max_tokens ?? 40;
+// later we could make base URL configurable too
+const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434/v1/chat/completions';
+
+export async function generateVothaLine({ context, instruction, model = MODEL_NAME }) {
   const messages = [
     { role: 'system', content: SYSTEM_PROMPT },
     { role: 'user', content: buildUserPrompt(context, instruction) }
   ];
 
-  const res = await fetch('http://localhost:11434/v1/chat/completions', {
+  const res = await fetch(OLLAMA_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model,
       messages,
       stream: false,
-      temperature: 0.7,
-      top_p: 0.9,
-      max_tokens: 40
+      temperature: TEMPERATURE,
+      top_p: TOP_P,
+      max_tokens: MAX_TOKENS
     })
   });
 

@@ -4,95 +4,122 @@
   <meta charset="UTF-8" />
   <title>Votha Overlay</title>
   <style>
-    :root { --base:#29d3ff; --hype:#ff3da9; --reflect:#4a6cff; --size:82px; }
-    body { margin:0; background:transparent; }
-    .v-shell { width:var(--size); height:var(--size); display:grid; place-items:center; position:relative; }
-    .v-core { width:64px; height:64px; border-radius:9999px;
-      background:radial-gradient(circle at 30% 30%, #fff, var(--base));
-      box-shadow:0 0 24px rgba(41,211,255,.6); transition:all .25s ease; }
+    :root {
+      --size: 140px;
+      --glow: rgba(41, 211, 255, 0.55);
+      --hype: rgba(255, 61, 169, 0.75);
+      --reflect: rgba(74, 108, 255, 0.7);
+    }
+    body {
+      margin: 0;
+      background: transparent;
+    }
+    .v-shell {
+      width: var(--size);
+      height: var(--size);
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
 
-    /* idle */
-    .state-idle .v-core { animation:breathe 2.6s ease-in-out infinite; }
+    /* this is now the actual icon */
+    .v-icon {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 0 18px var(--glow));
+      transition: transform 0.22s ease, filter 0.22s ease;
+    }
+
+    /* idle (default) */
+    .state-idle .v-icon {
+      animation: breathe 2.8s ease-in-out infinite;
+    }
     @keyframes breathe {
-      0%,100% { transform:scale(1); }
-      50% { transform:scale(1.06); }
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 14px var(--glow)); }
+      50% { transform: scale(1.04); filter: drop-shadow(0 0 20px var(--glow)); }
     }
 
     /* speaking */
-    .state-speaking .v-core {
-      animation:speak .28s ease-in-out 4;
-      background:radial-gradient(circle at 30% 30%, #fff, #7af1ff);
-      box-shadow:0 0 32px rgba(122,241,255,.9);
+    .state-speaking .v-icon {
+      transform: scale(1.08);
+      filter: drop-shadow(0 0 26px rgba(122, 241, 255, 0.95));
+      animation: speak 0.28s ease-in-out 4;
     }
     @keyframes speak {
-      0% { transform:scale(1); }
-      50% { transform:scale(1.12); }
-      100% { transform:scale(1); }
+      0% { transform: scale(1.0); }
+      50% { transform: scale(1.12); }
+      100% { transform: scale(1.0); }
     }
 
     /* hype */
-    .state-hype .v-core {
-      background:radial-gradient(circle at 30% 30%, #fff, var(--hype));
-      animation:hype .5s ease-out 1, hypepulse 1.5s ease-in-out infinite .5s;
-    }
-    @keyframes hype {
-      0% { transform:scale(1); }
-      40% { transform:scale(1.36); }
-      100% { transform:scale(1.1); }
+    .state-hype .v-icon {
+      transform: scale(1.12) rotate(-2deg);
+      filter: drop-shadow(0 0 32px var(--hype));
+      animation: hypepulse 1.5s ease-in-out infinite;
     }
     @keyframes hypepulse {
-      0%,100% { transform:scale(1.1); }
-      50% { transform:scale(1.2); }
+      0%, 100% { transform: scale(1.12) rotate(-2deg); }
+      50% { transform: scale(1.18) rotate(1deg); }
     }
 
     /* reflective */
-    .state-reflective .v-core {
-      background:radial-gradient(circle at 20% 20%, rgba(255,255,255,.3), var(--reflect));
-      animation:reflect 4s ease-in-out infinite;
+    .state-reflective .v-icon {
+      transform: scale(1.01);
+      filter: drop-shadow(0 0 18px var(--reflect));
+      animation: reflect 4s ease-in-out infinite;
     }
     @keyframes reflect {
-      0%,100% { transform:scale(1); opacity:.85; }
-      50% { transform:scale(1.04); opacity:1; }
+      0%, 100% { opacity: 0.85; }
+      50% { opacity: 1; }
     }
 
     /* glitch */
-    .state-glitch .v-core {
-      animation:glitch .45s steps(4,end) 1;
-      background:linear-gradient(120deg, #ff66c4 0%, #29d3ff 50%, #fff 100%);
+    .state-glitch .v-icon {
+      animation: glitch 0.45s steps(4, end) 1;
+      filter: drop-shadow(0 0 26px rgba(255, 102, 196, 0.95));
     }
     @keyframes glitch {
-      0% { transform:translate(0,0); }
-      25% { transform:translate(-2px,1px); }
-      50% { transform:translate(2px,-1px); }
-      75% { transform:translate(-1px,2px); }
-      100% { transform:translate(0,0); }
+      0% { transform: translate(0,0); }
+      25% { transform: translate(-2px, 1px); }
+      50% { transform: translate(2px, -1px); }
+      75% { transform: translate(-1px, 2px); }
+      100% { transform: translate(0,0); }
     }
 
-    /* text bubble */
+    /* text bubble (keep yours) */
     .v-text {
-      position:absolute;
-      top:90px;
-      left:50%;
-      transform:translateX(-50%);
-      min-width:150px;
-      max-width:260px;
-      background:rgba(5,6,10,.78);
-      color:#fff;
-      font:13px system-ui;
-      padding:6px 10px;
-      border-radius:12px;
-      opacity:0;
-      transition:opacity .2s;
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 150px;
+      max-width: 280px;
+      background: rgba(5, 6, 10, 0.78);
+      color: #fff;
+      font: 13px system-ui;
+      padding: 6px 10px 7px;
+      border-radius: 12px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      text-align: center;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.7);
     }
     .state-speaking .v-text,
     .state-hype .v-text {
-      opacity:1;
+      opacity: 1;
     }
   </style>
 </head>
 <body>
   <div id="votha" class="v-shell state-idle">
-    <div class="v-core"></div>
+    <!-- 👇 use your generated icon here -->
+    <img
+      id="votha-icon"
+      class="v-icon"
+      src="./assets/votha-icon.png"
+      alt="Votha Icon"
+    />
     <div id="vtext" class="v-text"></div>
   </div>
   <script>
@@ -100,12 +127,14 @@
     const root = document.getElementById('votha');
     const textEl = document.getElementById('vtext');
 
-    function setState(s, t) {
-      root.className = 'v-shell ' + s;
-      if (t) textEl.textContent = t;
-      if (s === 'state-speaking' || s === 'state-hype') {
-        setTimeout(() => {
+    function setState(state, text) {
+      root.className = 'v-shell ' + state;
+      if (text) textEl.textContent = text;
+      if (state === 'state-speaking' || state === 'state-hype') {
+        clearTimeout(window.__vothaReset);
+        window.__vothaReset = setTimeout(() => {
           root.className = 'v-shell state-idle';
+          // textEl.textContent = ''; // keep or clear, your call
         }, 2500);
       }
     }

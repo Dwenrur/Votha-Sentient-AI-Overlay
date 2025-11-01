@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { initStream } from '../core/memory.js';
 import { initOverlayServer } from '../overlay/overlay.js';
 import { handleEvent } from '../core/orchestrator.js';

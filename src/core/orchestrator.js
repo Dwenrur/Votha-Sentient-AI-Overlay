@@ -1,14 +1,14 @@
 import { EVENT_MAP } from './events.js';
 import { getState, addEvent, addLine, addNotableViewer } from './memory.js';
-import { generateVothaLine } from './llm.js';
-import { sendOverlayState } from './overlay.js';
+import { generateVothaLine } from '../ai/llm.js';
+import { sendOverlayState } from '../overlay/overlay.js';
+import { speak } from '../integrations/tts.js';
 
 export async function handleEvent(evt) {
   const def = EVENT_MAP[evt.type];
   if (!def) return;
 
   const mem = getState();
-
   const context = {
     stream_state: def.stream_state || mem.stream.stream_mood || 'engaged',
     event: evt.type,
@@ -20,14 +20,21 @@ export async function handleEvent(evt) {
   const line = await safeGenerate(def, context);
 
   if (line) {
+    // memory
     addLine(line);
     addEvent(evt);
     if (evt.user) {
       addNotableViewer(evt.user, { [evt.type]: true });
     }
 
+    // output to console (for debug)
     console.log('Votha:', line);
+
+    // overlay animation
     sendOverlayState({ state: 'speaking', text: line });
+
+    // TTS
+    speak(line);
   }
 }
 

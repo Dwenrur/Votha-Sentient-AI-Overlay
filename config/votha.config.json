@@ -1,7 +1,7 @@
 {
   "model": {
     "provider": "ollama",
-    "name": "llama3.2:8b",
+    "name": "llama3.1:8b",
     "temperature": 0.7,
     "top_p": 0.9,
     "max_tokens": 40
@@ -12,7 +12,16 @@
     "chat_spike_threshold": 30
   },
   "overlay": {
-    "ws_url": "ws://localhost:8765"
+    "ws_url": "ws://localhost:8765",
+    "port": 8765
+  },
+  "twitch": {
+    "channel": "deviantmittens"
+  },
+  "tts": {
+    "enabled": true,
+    "url": "http://localhost:5002/tts",
+    "voice": "votha"
   },
   "behavior": {
     "allow_repeat_after_seconds": 600

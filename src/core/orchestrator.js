@@ -17,25 +17,26 @@ export async function handleEvent(evt) {
     recent_votha_lines: mem.recentLines
   };
 
-  const line = await safeGenerate(def, context);
+  const rawLine = await safeGenerate(def, context);
+  if (!rawLine) return;
 
-  if (line) {
-    // memory
-    addLine(line);
-    addEvent(evt);
-    if (evt.user) {
-      addNotableViewer(evt.user, { [evt.type]: true });
-    }
+  // clean quotes if the model adds them
+  const line = rawLine.replace(/^"+|"+$/g, '').trim();
 
-    // output to console (for debug)
-    console.log('Votha:', line);
-
-    // overlay animation
-    sendOverlayState({ state: 'speaking', text: line });
-
-    // TTS
-    speak(line);
+  // memory updates
+  addLine(line);
+  addEvent(evt);
+  if (evt.user) {
+    addNotableViewer(evt.user, { [evt.type]: true });
   }
+
+  console.log('Votha:', line);
+
+  // overlay animation
+  sendOverlayState({ state: 'speaking', text: line });
+
+  // TTS (non-blocking)
+  speak(line);
 }
 
 async function safeGenerate(def, context) {

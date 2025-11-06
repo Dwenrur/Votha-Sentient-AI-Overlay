@@ -8,7 +8,7 @@
 ---
 
 ### 🌐 Overview
-**Votha Sentient Overlay** is a locally hosted, privacy-first AI companion built for streamers, creators, and tinkerers.  
+**Votha Sentient Overlay** is a vibe coded, locally hosted, privacy-first AI companion built for streamers, creators, and tinkerers.  
 It brings real-time intelligence to your Twitch streams and OBS scenes — allowing an on-screen AI to **speak, react, and adapt** to your chat and gameplay.
 
 Unlike cloud-based AI tools, **Votha runs entirely on your machine**, giving you full control over performance, customization, and data privacy.

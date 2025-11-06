@@ -18,7 +18,9 @@ This ensures:
 
 Before your first contribution, please:
 1. Review the license at [polyformproject.org/licenses/noncommercial/1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0/)
-2. Email **dwenrur@gmail.com** to receive the CLA before submitting a PR.
+2. Read and sign the CLA https://moccasin-athena-63.tiiny.site
+4. Email it to **dwenrur@gmail.com**
+
 
 ---
 

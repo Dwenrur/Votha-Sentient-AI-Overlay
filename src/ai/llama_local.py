@@ -1,3 +1,6 @@
+# Copyright (c) 2025 [Elijah Purvey]
+# Licensed under the PolyForm Noncommercial License 1.0.0
+# https://polyformproject.org/licenses/noncommercial/1.0.0/
 # src/ai/llama_local.py
 import json, requests
 from src.utils.config import load_config

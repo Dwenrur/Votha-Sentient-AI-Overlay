@@ -30,26 +30,26 @@ All changes must come through a **feature branch** and **pull request (PR)**.
 
 1. **Fork** the repository (if external).
 2. **Create a new branch** for your feature or fix:
-   ```bash
+   ```
    git checkout -b feature/my-new-feature
 
 Make your edits and commit with clear messages:
-
-git commit -m "Add context module for reasoning layer"
-
-
+   ```
+   git commit -m "Add context module for reasoning layer"
+   ```
 Pull from main before pushing:
-
-git pull origin main
-
+   ```
+   git pull origin main
+   ```
 
 Push your branch and open a PR:
-
-git push origin feature/my-new-feature
-
+   ```
+   git push origin feature/my-new-feature
+   ```
 
 Request review from a maintainer.
 One approval is required before merging.
+
 
 ✅ Code Standards
 
@@ -66,10 +66,12 @@ Avoid committing generated or compiled files.
 🔍 Commit Messages
 
 Use concise, imperative-style messages:
-
+```
 Add reasoning layer to contextual parser
 Fix typo in documentation
 Refactor dataset loader for clarity
+```
+
 
 🧪 Testing
 
@@ -80,6 +82,8 @@ Ensure existing tests pass.
 Add new tests for your features when possible.
 
 If you can’t test due to environment limits, mark the section with # TODO: needs test.
+
+
 
 🔐 Branch Protection Rules (for maintainers)
 
@@ -93,6 +97,8 @@ Linear history is enforced (use squash or rebase merges).
 
 Administrators follow the same rules.
 
+
+
 💬 Communication
 
 Use GitHub Issues for bug reports and feature requests.
@@ -100,6 +106,8 @@ Use GitHub Issues for bug reports and feature requests.
 Keep discussions respectful and constructive.
 
 The project thrives on curiosity and clarity — ask before assuming.
+
+
 
 🧠 Summary
 

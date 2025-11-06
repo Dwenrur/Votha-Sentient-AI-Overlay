@@ -1,0 +1,43 @@
+{
+  "llm": {
+    "backend": "ollama",
+    "url": "http://localhost:11434"
+  },
+  "model": {
+    "name": "llama3.1:8b",
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "max_tokens": 200
+  },
+  "twitch": {
+    "channel": "deviantmittens",
+    "client_id": "j3mly16x5mwnkujb2081t8gblvh91q",
+    "client_secret": "n0rkxk9l71sxelymmq411r9qyco9la",
+    "broadcaster_id": "121519096",
+    "reward_id": "OPTIONAL_REWARD_ID",
+    "user_access_token": "PASTE_USER_TOKEN_HERE"
+  },
+  "overlay": {
+    "ws_url": "ws://localhost:8765",
+    "port": 8765
+  },
+  "tts": {
+    "engine": "piper",
+    "enabled": true,
+    "piper_path": "piper/piper.exe",
+    "voice_model": "piper/voices/en_US-norman-medium.onnx",
+    "voice_config": "piper/voices/en_US-norman-medium.onnx.json",
+    "voice": "votha"
+  },
+  "audio": {
+    "device": 22
+  },
+  "stream": {
+    "default_state": "engaged",
+    "chat_lull_threshold": 5,
+    "chat_spike_threshold": 30
+  },
+  "behavior": {
+    "allow_repeat_after_seconds": 600
+  }
+}

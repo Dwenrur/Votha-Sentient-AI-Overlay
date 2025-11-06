@@ -1,0 +1,66 @@
+name: CI (Windows)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    name: Build & Test (Windows)
+    runs-on: windows-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11']  # adjust as needed
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Show Python info
+        run: |
+          python --version
+          pip --version
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if exist requirements.txt pip install -r requirements.txt
+          pip install pytest flake8
+
+      # Optional: if you have Windows-specific wheels you want to preinstall, add them above.
+
+      - name: Lint
+        run: flake8 .
+        # If you don't have a flake8 config yet, create .flake8 to tune rules.
+
+      - name: Run tests
+        env:
+          # Provide fake/empty values so tests that read env vars won't crash.
+          TWITCH_CLIENT_ID: test
+          TWITCH_CLIENT_SECRET: test
+          TWITCH_BOT_TOKEN: test
+          OBS_HOST: 127.0.0.1
+          OBS_PORT: 4455
+          OBS_PASSWORD: test
+        run: |
+          # Skip true integration tests on CI if they require OBS/Twitch live services.
+          # In pytest, mark those as @pytest.mark.integration and exclude them here:
+          pytest -q -m "not integration"
+
+      # Optional: If you generate artifacts (e.g., logs), upload them:
+      # - name: Upload test logs
+      #   if: failure()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: test-logs
+      #     path: .pytest_cache

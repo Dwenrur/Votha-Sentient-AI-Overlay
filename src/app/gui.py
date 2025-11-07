@@ -4,6 +4,8 @@
 # src/app/gui.py
 import tkinter as tk
 from tkinter import scrolledtext
+from tkinter import ttk
+from src.app.settings_tab import SettingsTab
 
 class VothaGUI:
     def __init__(self, root):
@@ -22,3 +24,18 @@ class VothaGUI:
     def add_log(self, text: str):
         self.log.insert(tk.END, text + "\n")
         self.log.see(tk.END)
+
+    def __init__(self, root: tk.Tk):
+        self.root = root
+        self.root.title("Votha")
+
+        # if you already have a Notebook, reuse it.
+        self.notebook = ttk.Notebook(self.root)
+        self.notebook.pack(fill="both", expand=True)
+
+        # ... your existing tabs ...
+        # self.notebook.add(existing_frame, text="Home")
+
+        # NEW: Settings tab
+        self.settings_tab = SettingsTab(self.notebook)
+        self.notebook.add(self.settings_tab, text="Settings")

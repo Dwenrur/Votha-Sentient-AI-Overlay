@@ -1,11 +1,3 @@
 # Copyright (c) 2025 [Elijah Purvey]
 # Licensed under the PolyForm Noncommercial License 1.0.0
 # https://polyformproject.org/licenses/noncommercial/1.0.0/
-
-
-simpleaudio
-websockets
-sounddevice>=0.4.6
-soundfile>=0.12
-numpy>=1.26
-requests>=2.32
